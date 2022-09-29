@@ -1,0 +1,189 @@
+
+window.onload = function() {
+  // Build a system
+  var url = window.location.search.match(/url=([^&]+)/);
+  if (url && url.length > 1) {
+    url = decodeURIComponent(url[1]);
+  } else {
+    url = window.location.origin;
+  }
+  var options = {
+  "swaggerDoc": {
+    "swagger": "2.0",
+    "info": {
+      "description": "This is a simple example NodeJS API project to demonstrate Swagger Documentation",
+      "version": "1.0.0",
+      "title": "Tasks API",
+      "contact": {
+        "email": "abc@gmail.com"
+      },
+      "license": {
+        "name": "Apache 2.0",
+        "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+      }
+    },
+    "schemes": [
+      "http"
+    ],
+    "host": "localhost:3080",
+    "basePath": "/api",
+    "paths": {
+      "/food/:type/:sort_by/:page": {
+        "get": {
+          "summary": "retrieve food products (fruits/vegetables)",
+          "description": "retrieve food products (fruits/vegetables)",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "type",
+              "in": "path",
+              "description": "to choose between food category fruits or vegetables",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "sort_by",
+              "in": "path",
+              "description": "what column to sort by accordingly ",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "page",
+              "in": "path",
+              "description": "number of page to send it to server to paginate results",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/todosResponse"
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid status value",
+              "schema": {
+                "$ref": "#/definitions/InvalidResponse"
+              }
+            }
+          }
+        }
+      },
+      "/electronics/:sort_by/:page": {
+        "get": {
+          "summary": "retrieve food products (fruits/vegetables)",
+          "description": "retrieve food products (fruits/vegetables)",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "sort_by",
+              "in": "path",
+              "description": "what column to sort by accordingly ",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "page",
+              "in": "path",
+              "description": "number of page to send it to server to paginate results",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/todosResponse"
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid status value",
+              "schema": {
+                "$ref": "#/definitions/InvalidResponse"
+              }
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "categories": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "products": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "price": {
+            "type": "float"
+          },
+          "categoryId": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  },
+  "customOptions": {}
+};
+  url = options.swaggerUrl || url
+  var urls = options.swaggerUrls
+  var customOptions = options.customOptions
+  var spec1 = options.swaggerDoc
+  var swaggerOptions = {
+    spec: spec1,
+    url: url,
+    urls: urls,
+    dom_id: '#swagger-ui',
+    deepLinking: true,
+    presets: [
+      SwaggerUIBundle.presets.apis,
+      SwaggerUIStandalonePreset
+    ],
+    plugins: [
+      SwaggerUIBundle.plugins.DownloadUrl
+    ],
+    layout: "StandaloneLayout"
+  }
+  for (var attrname in customOptions) {
+    swaggerOptions[attrname] = customOptions[attrname];
+  }
+  var ui = SwaggerUIBundle(swaggerOptions)
+
+  if (customOptions.oauth) {
+    ui.initOAuth(customOptions.oauth)
+  }
+
+  if (customOptions.authAction) {
+    ui.authActions.authorize(customOptions.authAction)
+  }
+
+  window.ui = ui
+}
